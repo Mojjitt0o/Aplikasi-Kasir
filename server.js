@@ -25,6 +25,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 // 🔹 Set folder publicdashboard untuk file static Dashboard
 app.use('/dashboard', express.static(path.join(__dirname, 'publicdashboard')));
 
+// 🔹 Set folder publicdashboard untuk file static Dashboard
+app.use('/reset', express.static(path.join(__dirname, 'publicaturpassword')));
+
 
 
 
@@ -35,6 +38,13 @@ app.use('/dashboard', express.static(path.join(__dirname, 'publicdashboard')));
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+
+// 🔹 Arahkan ke index.html saat akses root URL
+app.get('/reset', (req, res) => {
+    res.sendFile(path.join(__dirname, 'publicaturpassword', 'index.html'));
+});
+
+
 
 
 // Routes

@@ -126,6 +126,69 @@ const login = (req, res) => {
     });
 };
 
+// **Lupa Password - Kirim Token Reset**
+const forgotPassword = (req, res) => {
+    const { email } = req.body;
+    
+    db.query("SELECT id FROM users WHERE email = ?", [email])
+    .then(([results]) => {
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Email tidak ditemukan' });
+        }
+        
+        const resetToken = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        
+        return db.query("UPDATE users SET reset_token = ? WHERE email = ?", [resetToken, email])
+        .then(() => {
+            const resetLink = `${process.env.BASE_URL}/reset/?token=${resetToken}`;
+            return transporter.sendMail({
+                from: process.env.EMAIL_USER,
+                to: email,
+                subject: 'Reset Password',
+                html: `<p>Klik link di bawah untuk mereset password Anda:</p>
+                       <a href="${resetLink}">Reset Password</a>`
+            });
+        });
+    })
+    .then(() => {
+        res.json({ status: 'success', message: 'Email reset password telah dikirim' });
+    })
+    .catch(error => {
+        console.error('Error sending reset email:', error);
+        res.status(500).json({ error: 'Gagal mengirim email reset password' });
+    });
+};
+
+// **Reset Password dengan Token**
+const resetPassword = (req, res) => {
+    const { token, newPassword } = req.body;
+    
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        
+        db.query("SELECT email FROM users WHERE reset_token = ?", [token])
+        .then(([results]) => {
+            if (results.length === 0) {
+                return res.status(400).json({ error: 'Token tidak valid atau sudah kadaluarsa' });
+            }
+            
+            return bcrypt.hash(newPassword, 10)
+            .then(hashedPassword => {
+                return db.query("UPDATE users SET password = ?, reset_token = NULL WHERE email = ?", [hashedPassword, decoded.email]);
+            });
+        })
+        .then(() => {
+            res.json({ status: 'success', message: 'Password berhasil direset' });
+        })
+        .catch(error => {
+            console.error('Error resetting password:', error);
+            res.status(500).json({ error: 'Gagal mereset password' });
+        });
+    } catch (err) {
+        return res.status(400).json({ error: 'Token tidak valid atau sudah kadaluarsa' });
+    }
+};
+
 // **Fungsi Kirim Pesan ke Telegram**
 const sendTelegramMessage = (message) => {
     return axios.post(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
@@ -137,4 +200,4 @@ const sendTelegramMessage = (message) => {
     });
 };
 
-module.exports = { register, verifyEmail, login };
+module.exports = { register, verifyEmail, login, forgotPassword, resetPassword };

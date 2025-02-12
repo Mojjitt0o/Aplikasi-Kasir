@@ -10,7 +10,7 @@ router.get('/weekly', verifyToken, checkRole(['kasir', 'admin']), reportControll
 router.get('/monthly', verifyToken, checkRole(['kasir', 'admin']), reportController.getMonthlyReport);
 
 // Produk Terlaris & Rekap Kasir (Hanya untuk Admin)
-router.get('/top-products', verifyToken, checkRole(['admin']), reportController.getTopSellingProducts);
+router.get('/top-products', verifyToken, checkRole(['kasir', 'admin']), reportController.getTopSellingProducts);
 router.get('/cashier-report', verifyToken, checkRole(['admin']), reportController.getCashierReport);
 router.get('/export-sales-report', verifyToken, checkRole(['admin']), reportController.exportSalesReportToExcel);
 

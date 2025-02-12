@@ -1,15 +1,17 @@
 const db = require('../config/db');
 const XLSX = require('xlsx');
 
-// Laporan Harian
+// Laporan Harian (Memastikan Format Response Sesuai)
 exports.getDailyReport = (req, res) => {
     db.query(`
-        SELECT SUM(grand_total) AS omset, SUM(pajak) AS pajak
+        SELECT DATE(transaction_date) AS date, SUM(grand_total) AS omset 
         FROM transactions
         WHERE DATE(transaction_date) = CURDATE();
     `)
     .then(([result]) => {
-        res.json(result);
+        // Ubah format response agar selalu array
+        const responseData = result.length > 0 ? result : [{ date: new Date().toISOString().split('T')[0], omset: 0 }];
+        res.json(responseData);
     })
     .catch((error) => {
         console.error("Error fetching daily report:", error);
@@ -51,10 +53,10 @@ exports.getMonthlyReport = (req, res) => {
     });
 };
 
-// Produk Terlaris
+// Produk Terlaris (Memastikan Format Response Sesuai)
 exports.getTopSellingProducts = (req, res) => {
     db.query(`
-        SELECT p.id AS produk_id, p.nama AS nama_produk, SUM(dt.jumlah) AS jumlah_penjualan, SUM(dt.total_harga) AS total_penjualan
+        SELECT p.id AS produk_id, p.nama AS nama_produk, SUM(dt.jumlah) AS jumlah_penjualan
         FROM detail_transaksi dt
         JOIN produk p ON p.id = dt.produk_id
         GROUP BY dt.produk_id

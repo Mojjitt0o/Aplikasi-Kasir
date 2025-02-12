@@ -49,3 +49,30 @@ document.getElementById('registerForm').addEventListener('submit', function(e) {
         toggleForms('loginBox');
     });
 });
+
+// 🔹 Tambahkan event listener untuk form lupa password
+document.getElementById('forgotForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    
+    const email = document.getElementById('forgotEmail').value;
+
+    fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email })
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message);
+        if (data.status === 'success') {
+            // Setelah sukses, arahkan user ke halaman login atau dashboard
+            window.location.href = '/';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan, coba lagi nanti.');
+    });
+});

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password - Aplikasi Kasir</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="form-box active" id="resetBox">
+            <h2>Ubah Password</h2>
+            <form id="resetForm">
+                <input type="password" id="newPassword" placeholder="Password Baru" required>
+                <input type="password" id="confirmPassword" placeholder="Konfirmasi Password" required>
+                <button type="submit">Reset Password</button>
+                <p><a href="/">Kembali ke Login</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('resetForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (newPassword.length < 6) {
+                alert('Password harus memiliki setidaknya 6 karakter.');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                alert('Password tidak cocok!');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/auth/reset-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token, newPassword })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    alert('Password berhasil direset. Silakan login kembali.');
+                    window.location.href = '/';
+                } else {
+                    alert(data.error || 'Terjadi kesalahan saat mereset password.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Gagal menghubungkan ke server. Coba lagi nanti.');
+            }
+        });
+    </script>
+</body>
+</html>
