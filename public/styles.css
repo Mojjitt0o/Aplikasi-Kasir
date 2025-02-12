@@ -35,7 +35,7 @@ h2 {
 }
 
 form input, form select {
-    width: 100%;
+    width: 94%;
     padding: 0.8rem;
     margin: 0.5rem 0;
     border: 1px solid #ccc;
@@ -43,7 +43,7 @@ form input, form select {
 }
 
 button {
-    width: 100%;
+    width: 75%;          /* Atur lebar 100% agar sesuai dengan form */
     padding: 0.8rem;
     background: #74ebd5;
     border: none;
@@ -52,7 +52,10 @@ button {
     font-weight: bold;
     cursor: pointer;
     transition: background 0.3s;
+    display: block;       /* Membuat button sebagai block-level */
+    margin: 0 auto;       /* Centering button */
 }
+
 
 button:hover {
     background: #4bbbc2;

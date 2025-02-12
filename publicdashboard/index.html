@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Aplikasi Kasir</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Tambahkan CDN Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navigasi -->
+    <nav class="navbar">
+        <h1>Aplikasi Kasir</h1>
+        <ul>
+            <li><a href="#" onclick="navigate('/produk')">Produk</a></li>
+            <li><a href="#" onclick="navigate('/transaksi')">Transaksi</a></li>
+            <li><a href="#" onclick="navigate('/laporan')">Laporan</a></li>
+        </ul>
+    </nav>
+
+    <!-- Dashboard Utama -->
+    <main class="dashboard">
+        <section class="card">
+            <h2>Diagram Penjualan Harian</h2>
+            <canvas id="salesChart"></canvas>
+        </section>
+        <section class="card">
+            <h2>Produk Terlaris</h2>
+            <ul id="topProducts"></ul>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

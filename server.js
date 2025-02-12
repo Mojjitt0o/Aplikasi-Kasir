@@ -22,10 +22,20 @@ app.use(morgan('dev'));
 // 🔹 Set folder public untuk file static (HTML, CSS, JS)
 app.use(express.static(path.join(__dirname, 'public')));
 
+// 🔹 Set folder publicdashboard untuk file static Dashboard
+app.use('/dashboard', express.static(path.join(__dirname, 'publicdashboard')));
+
+
+
+
+// 🔹 Set folder publicdashboard untuk file static Dashboard
+app.use('/dashboard', express.static(path.join(__dirname, 'publicdashboard')));
+
 // 🔹 Arahkan ke index.html saat akses root URL
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+
 
 // Routes
 app.use('/api/auth', authRoutes);
