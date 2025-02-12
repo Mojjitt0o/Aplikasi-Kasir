@@ -1,21 +1,17 @@
-// routes/reportRoutes.js
 const express = require('express');
-const router = express.Router();
 const reportController = require('../controllers/reportController');
-console.log(reportController);
+const { verifyToken, checkRole } = require('../middlewares/authMiddleware');
+
+const router = express.Router();
 
 // Laporan Harian, Mingguan, Bulanan
-router.get('/daily', reportController.getDailyReport);
-router.get('/weekly', reportController.getWeeklyReport);
-router.get('/monthly', reportController.getMonthlyReport);
+router.get('/daily', verifyToken, checkRole(['kasir', 'admin']), reportController.getDailyReport);
+router.get('/weekly', verifyToken, checkRole(['kasir', 'admin']), reportController.getWeeklyReport);
+router.get('/monthly', verifyToken, checkRole(['kasir', 'admin']), reportController.getMonthlyReport);
 
-// Produk Terlaris
-router.get('/top-products', reportController.getTopSellingProducts);
-
-// Rekap Kasir
-router.get('/cashier-report', reportController.getCashierReport);
-
-// Export Laporan Penjualan ke Excel
-router.get('/export-sales-report', reportController.exportSalesReportToExcel);
+// Produk Terlaris & Rekap Kasir (Hanya untuk Admin)
+router.get('/top-products', verifyToken, checkRole(['admin']), reportController.getTopSellingProducts);
+router.get('/cashier-report', verifyToken, checkRole(['admin']), reportController.getCashierReport);
+router.get('/export-sales-report', verifyToken, checkRole(['admin']), reportController.exportSalesReportToExcel);
 
 module.exports = router;

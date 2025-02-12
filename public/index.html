@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth - Aplikasi Kasir</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="auth-container">
+        <!-- Form Login -->
+        <div class="form-box active" id="loginBox">
+            <h2>Masuk</h2>
+            <form id="loginForm">
+                <input type="email" id="loginEmail" placeholder="Email" required>
+                <input type="password" id="loginPassword" placeholder="Password" required>
+                <button type="submit">Login</button>
+                <p>Tidak punya akun? <a href="#" onclick="toggleForms('registerBox')">Silahkan Registrasi</a></p>
+                <p><a href="#" onclick="toggleForms('forgotBox')">Lupa Password?</a></p>
+            </form>
+        </div>
+
+        <!-- Form Registrasi -->
+        <div class="form-box" id="registerBox">
+            <h2>Registrasi</h2>
+            <form id="registerForm">
+                <input type="text" id="registerNama" placeholder="Nama Lengkap" required>
+                <input type="email" id="registerEmail" placeholder="Email" required>
+                <input type="password" id="registerPassword" placeholder="Password" required>
+                <select id="registerRole" required>
+                    <option value="">Pilih Role</option>
+                    <option value="admin">Admin</option>
+                    <option value="kasir">Kasir</option>
+                </select>
+                <button type="submit">Daftar</button>
+                <p>Sudah punya akun? <a href="#" onclick="toggleForms('loginBox')">Login Disini</a></p>
+            </form>
+        </div>
+
+        <!-- Form Lupa Password -->
+        <div class="form-box" id="forgotBox">
+            <h2>Lupa Password</h2>
+            <form id="forgotForm">
+                <input type="email" id="forgotEmail" placeholder="Masukkan Email Anda" required>
+                <button type="submit">Reset Password</button>
+                <p>Kembali ke <a href="#" onclick="toggleForms('loginBox')">Login</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

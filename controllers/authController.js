@@ -37,8 +37,12 @@ const register = (req, res) => {
                 from: process.env.EMAIL_USER,
                 to: email,
                 subject: 'Verifikasi Email Anda',
-                text: `Klik link ini untuk verifikasi email Anda: ${verificationLink}`
+                html: `
+                    <p>Terima kasih telah mendaftar. Klik link di bawah ini untuk verifikasi email Anda:</p>
+                    <a href="${verificationLink}">Silahkan Verifikasi</a>
+                `
             })
+            
             .then(() => {
                 return sendTelegramMessage(`📩 Pendaftaran Baru:\n👤 Nama: ${nama}\n📧 Email: ${email}\n🛠️ Role: ${role}\n🔗 Verifikasi: ${verificationLink}`);
             });
