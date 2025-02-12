@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Produk</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigasi -->
+    <nav class="navbar">
+        <h1>Aplikasi Kasir</h1>
+        <ul>
+            <li><a href="#" onclick="navigate('/produk')">Produk</a></li>
+            <li><a href="#" onclick="navigate('/transaksi')">Transaksi</a></li>
+            <li><a href="#" onclick="navigate('/laporan')">Laporan</a></li>
+        </ul>
+        <!-- Ikon Profil & Logout -->
+        <div class="profile-menu">
+            <i class="fas fa-user-circle" onclick="toggleProfileMenu()"></i>
+            <div id="profileDropdown" class="profile-dropdown">
+                <a href="#" onclick="logout()">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Utama -->
+    <main class="dashboard">
+        <section class="card">
+            <h2>Daftar Produk</h2>
+            <button onclick="openAddProductModal()">Tambah Produk</button>
+            <table id="productsTable">
+                <thead>
+                    <tr>
+                        <th>Nama</th>
+                        <th>Harga</th>
+                        <th>Stok</th>
+                        <th>Barcode</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="productsList"></tbody>
+            </table>
+        </section>
+    </main>
+
+    <!-- Modal Tambah Produk -->
+    <div id="addProductModal" class="modal">
+        <div class="modal-content">
+            <h3>Tambah Produk</h3>
+            <label for="nama">Nama:</label>
+            <input type="text" id="nama" required><br>
+            <label for="harga">Harga:</label>
+            <input type="number" id="harga" required><br>
+            <label for="stok">Stok:</label>
+            <input type="number" id="stok" required><br>
+            <label for="barcode">Barcode:</label>
+            <input type="text" id="barcode" required><br>
+            <button onclick="addProduct()">Simpan</button>
+            <button onclick="closeAddProductModal()">Batal</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

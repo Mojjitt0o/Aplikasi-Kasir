@@ -1,17 +1,49 @@
 // Navigasi Halaman
 function navigate(page) {
-    // Ubah URL tanpa reload halaman
-    history.pushState({}, '', page);
-    alert('Navigasi ke ' + page + ' belum diimplementasikan.');
+    // Ganti URL dengan pushState agar tidak me-refresh halaman
+    if (page === '/produk') {
+        window.location.href = '/produk'; // Arahkan ke halaman produk
+    } else if (page === '/transaksi') {
+        window.location.href = '/transaksi'; // Arahkan ke halaman transaksi
+    } else if (page === '/laporan') {
+        window.location.href = '/laporan'; // Arahkan ke halaman laporan
+    }
+}
+
+// Fungsi Logout
+function logout() {
+    localStorage.removeItem('token'); // Hapus token login
+    localStorage.removeItem('loginTime'); // Hapus waktu login
+    alert('Anda berhasil logout.');
+    window.location.href = '/'; // Arahkan ke halaman login
+}
+
+// Fungsi untuk toggle menu profil
+function toggleProfileMenu() {
+    const dropdown = document.getElementById('profileDropdown');
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
 }
 
 // Fetch Data Penjualan dan Produk Terlaris
 async function fetchData() {
     try {
-        // Ambil token dari localStorage (pastikan token sudah disimpan saat login)
+        // Cek apakah user sudah login
         const token = localStorage.getItem('token');
         if (!token) {
             alert('Anda harus login terlebih dahulu.');
+            window.location.href = '/login'; // Arahkan ke halaman login jika belum login
+            return;
+        }
+
+        // Cek waktu sesi
+        const sessionTimeout = 30 * 60 * 1000; // 30 menit
+        const loginTime = localStorage.getItem('loginTime');
+
+        if (loginTime && (Date.now() - loginTime > sessionTimeout)) {
+            localStorage.removeItem('token'); // Menghapus token login
+            localStorage.removeItem('loginTime'); // Menghapus waktu login
+            alert('Sesi telah berakhir. Silakan login kembali.');
+            window.location.href = '/login'; // Arahkan ke halaman login
             return;
         }
 
@@ -21,33 +53,26 @@ async function fetchData() {
             'Content-Type': 'application/json' 
         };
 
-        // Tampilkan Loading State
-        document.getElementById('salesChart').style.opacity = '0.5';
-        document.getElementById('topProducts').innerHTML = '<li>Loading...</li>';
-
-        // Ambil Data dari API dengan token
+        // Fetch data untuk dashboard
         const salesResponse = await fetch('/api/reports/daily', { headers });
         const salesData = await salesResponse.json();
 
         const productResponse = await fetch('/api/reports/top-products', { headers });
         const productData = await productResponse.json();
 
-        // Hilangkan Loading State
+        // Hilangkan loading
         document.getElementById('salesChart').style.opacity = '1';
         document.getElementById('topProducts').innerHTML = '';
 
-        // Pastikan data yang diterima berupa array
-        const salesArray = Array.isArray(salesData) ? salesData : [salesData];
-
-        // Chart Penjualan
+        // Visualisasikan data (misalnya grafik penjualan)
         const ctx = document.getElementById('salesChart').getContext('2d');
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: salesArray.map(item => item.date || 'Tidak Ada Data'),
+                labels: salesData.map(item => item.date || 'Tidak Ada Data'),
                 datasets: [{
                     label: 'Penjualan Harian',
-                    data: salesArray.map(item => item.omset || 0),
+                    data: salesData.map(item => item.omset || 0),
                     backgroundColor: '#74ebd5',
                     hoverBackgroundColor: '#4ea8a1'
                 }]
@@ -56,15 +81,11 @@ async function fetchData() {
                 responsive: true,
                 scales: {
                     y: { beginAtZero: true }
-                },
-                animation: {
-                    duration: 1000,
-                    easing: 'easeInOutBounce'
                 }
             }
         });
 
-        // Produk Terlaris
+        // Tampilkan produk terlaris
         const topProducts = document.getElementById('topProducts');
         productData.forEach(product => {
             const li = document.createElement('li');

@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="styles.css">
     <!-- Tambahkan CDN Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- CDN untuk FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <!-- Navigasi -->
@@ -17,6 +19,14 @@
             <li><a href="#" onclick="navigate('/transaksi')">Transaksi</a></li>
             <li><a href="#" onclick="navigate('/laporan')">Laporan</a></li>
         </ul>
+        <!-- Ikon Profil & Logout -->
+        <div class="profile-menu">
+            <i class="fas fa-user-circle" onclick="toggleProfileMenu()"></i>
+            <div id="profileDropdown" class="profile-dropdown">
+                <a href="#" onclick="logout()">Logout</a>
+                <!-- Tambahkan menu lain jika diperlukan -->
+            </div>
+        </div>
     </nav>
 
     <!-- Dashboard Utama -->
