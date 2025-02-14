@@ -3,61 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Produk</title>
+    <title>Menu Produk - Aplikasi Kasir</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- CDN untuk FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <!-- Navigasi -->
     <nav class="navbar">
         <h1>Aplikasi Kasir</h1>
         <ul>
-            <li><a href="#" onclick="navigate('/produk')">Produk</a></li>
-            <li><a href="#" onclick="navigate('/transaksi')">Transaksi</a></li>
-            <li><a href="#" onclick="navigate('/laporan')">Laporan</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/produk" class="active">Produk</a></li>
+            <li><a href="/transaksi">Transaksi</a></li>
+            <li><a href="/laporan">Laporan</a></li>
         </ul>
-        <!-- Ikon Profil & Logout -->
-        <div class="profile-menu">
-            <i class="fas fa-user-circle" onclick="toggleProfileMenu()"></i>
-            <div id="profileDropdown" class="profile-dropdown">
-                <a href="#" onclick="logout()">Logout</a>
-            </div>
-        </div>
     </nav>
 
-    <!-- Dashboard Utama -->
-    <main class="dashboard">
-        <section class="card">
-            <h2>Daftar Produk</h2>
-            <button onclick="openAddProductModal()">Tambah Produk</button>
-            <table id="productsTable">
-                <thead>
-                    <tr>
-                        <th>Nama</th>
-                        <th>Harga</th>
-                        <th>Stok</th>
-                        <th>Barcode</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="productsList"></tbody>
-            </table>
-        </section>
+    <!-- Menu Produk -->
+    <main class="product-container">
+        <h2>Daftar Produk</h2>
+
+        <!-- Tombol Tambah Produk -->
+        <button class="add-product-btn" onclick="showAddProductPopup()">+ Tambah Produk</button>
+
+        <!-- Input Pencarian Produk -->
+        <input type="text" id="searchProduct" placeholder="Cari produk..." onkeyup="searchProduct()">
+
+        <!-- Tabel Daftar Produk -->
+        <table class="product-table">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Produk</th>
+                    <th>Harga</th>
+                    <th>Stok</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="productList">
+                <!-- Data produk akan diisi oleh script.js -->
+            </tbody>
+        </table>
     </main>
 
-    <!-- Modal Tambah Produk -->
-    <div id="addProductModal" class="modal">
-        <div class="modal-content">
-            <h3>Tambah Produk</h3>
-            <label for="nama">Nama:</label>
-            <input type="text" id="nama" required><br>
-            <label for="harga">Harga:</label>
-            <input type="number" id="harga" required><br>
-            <label for="stok">Stok:</label>
-            <input type="number" id="stok" required><br>
-            <label for="barcode">Barcode:</label>
-            <input type="text" id="barcode" required><br>
-            <button onclick="addProduct()">Simpan</button>
-            <button onclick="closeAddProductModal()">Batal</button>
+    <!-- Pop-up Form Tambah/Edit Produk -->
+    <div class="popup" id="productPopup">
+        <div class="popup-content">
+            <h3 id="popupTitle">Tambah Produk</h3>
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                <input type="text" id="productName" placeholder="Nama Produk" required>
+                <input type="number" id="productPrice" placeholder="Harga" required>
+                <input type="number" id="productStock" placeholder="Stok" required>
+                <button type="submit" id="submitProductBtn">Simpan</button>
+                <button type="button" class="cancel-btn" onclick="closePopup()">Batal</button>
+            </form>
         </div>
     </div>
 
